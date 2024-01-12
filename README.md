@@ -10,6 +10,7 @@ Mohammad Wahyu Budi Mulya<br>
 
 ## Laravelサーバの作成
 1) next_tweet フォルダをVSCodeで開く
+
 2) ターミナルを開いて、Laravelプロジェクトを作成
 
 ```
@@ -50,4 +51,53 @@ composer require laravel/breeze --dev
 
 ```
 php artisan breeze:install blade
+```
+
+3) ブラウザで確認
+
+http://localhost:8000
+
+
+## DB作成
+1) DBマイグレートする
+
+```
+php artisan migrate
+```
+
+2) phpMyAdminでテーブル確認する
+
+3) Registerからユーザ登録する
+
+4) Tweetモデルの作成
+
+```
+php artisan make:model Tweet -m
+```
+
+5) app/Models/Tweet.php の修正
+
+```
+    protected $fillable = [
+        'user_id',
+        'message',
+    ];
+```
+
+6) database/migrations/xxx_create_tweets_xxx.php を修正
+
+```
+        Schema::create('tweets', function (Blueprint $table) {
+            $table->id();
+            $table->dateTime('created_at', $precision = 0);
+            $table->dateTime('updated_at', $precision = 0);
+            $table->unsignedInteger('user_id');
+            $table->text('message');
+        });
+```
+
+7) マイグレートする
+
+```
+php artisan migrate
 ```
