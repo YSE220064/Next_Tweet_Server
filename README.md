@@ -8,6 +8,7 @@ Mohammad Wahyu Budi Mulya<br>
 </p>
 
 
+
 ## Laravelサーバの作成
 1) next_tweet フォルダをVSCodeで開く
 
@@ -101,3 +102,15 @@ php artisan make:model Tweet -m
 ```
 php artisan migrate
 ```
+
+## APIコントローラー作成
+
+1) Api/TweetController を作成
+
+```
+php artisan make:controller Api/TweetController
+```
+
+2) TweetController を修正
+
+3) routes/api.php を修正
