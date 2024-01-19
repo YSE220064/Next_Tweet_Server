@@ -3,27 +3,37 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegistUserRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Api\TweetRequest;
+use App\Models\Tweet;
+use Illuminate\Http\Request;
 
-class RegistUserController extends Controller
+class TweetController extends Controller
 {
-
-    public function store(RegistUserRequest $request)
+    //データ取得
+    function get()
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        if ($user) {
-            $user->remember_token = $user->createToken('auth_token', ['*'], now()->addWeek())->plainTextToken;
-            $user->save();
-            $user->access_token = $user->remember_token;
-            return response()->json(['user' => $user]);
+        //「tweets」テーブルのレコードをすべて取得
+        // SELECT * FROM tweets;
+        $tweets = Tweet::get();
+        // JSONでレスポンス
+        return response()->json($tweets);
+    }
+
+    //データ投稿
+    function add(Request $request)
+    {
+        //認証中のUserを取得
+        $user = $request->user();
+
+        // User IDが一致したらDB保存
+        if ($user->id == $request->user_id) {
+            $tweet = Tweet::create($request->all());
+            return response()->json($tweet);
         } else {
-            return response()->json(['error' => ['message' => 'invalid regist']]);
+            return response()->json(
+                ['error' => 'invalid tweet'],
+                401
+            );
         }
     }
 }
